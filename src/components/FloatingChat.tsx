@@ -20,7 +20,7 @@ export const FloatingChat = () => {
 
   const handleChatOpen = async () => {
     try {
-      const session = await initializeChat("Smartbotics Landscaping Assistant", "landscape_bot_1");
+      const session = await initializeChat("Smartbotics Landscaping Assistant", "smartbotics_landscape_agent");
       setSessionId(session.session_id);
       setMessages([{ type: "bot", content: session.message }]);
       setIsOpen(true);
@@ -41,7 +41,7 @@ export const FloatingChat = () => {
     setMessages((prev) => [...prev, { type: "user", content: userMessage }]);
 
     try {
-      const response = await sendMessage(userMessage, sessionId, "landscape_bot_1");
+      const response = await sendMessage(userMessage, sessionId, "smartbotics_landscape_agent");
       setMessages((prev) => [...prev, { type: "bot", content: response.response }]);
     } catch (error) {
       toast({

@@ -14,17 +14,20 @@ export async function initializeChat(agent_name: string, agent_id: string): Prom
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      'Accept': 'application/json'
     },
     body: JSON.stringify({ 
       agent_name, 
       agent_id,
-      user_name: 'temp',
-      user_email: 'temp@smaartbotics.com'
+      user_name: 'Guest User',
+      user_email: 'guest@smartbotics.com',
+      context: 'landscaping_services'
     }),
   });
 
   if (!response.ok) {
-    throw new Error('Failed to initialize chat session');
+    const errorData = await response.text();
+    throw new Error(`Failed to initialize chat session: ${errorData}`);
   }
 
   return response.json();
@@ -38,17 +41,20 @@ export async function sendMessage(
   const formData = new FormData();
   formData.append('query', query);
   formData.append('agent_id', agent_id);
+  formData.append('context', 'landscaping_services');
 
   const response = await fetch(`${API_BASE_URL}/chat_agent_response`, {
     method: 'POST',
     headers: {
       'Session-Id': session_id,
+      'Accept': 'application/json'
     },
     body: formData,
   });
 
   if (!response.ok) {
-    throw new Error('Failed to send message');
+    const errorData = await response.text();
+    throw new Error(`Failed to send message: ${errorData}`);
   }
 
   return response.json();
@@ -62,17 +68,20 @@ export async function sendAudioMessage(
   const formData = new FormData();
   formData.append('audio_file', audioBlob, 'audio.wav');
   formData.append('agent_id', agent_id);
+  formData.append('context', 'landscaping_services');
 
   const response = await fetch(`${API_BASE_URL}/chat_agent_response`, {
     method: 'POST',
     headers: {
       'Session-Id': session_id,
+      'Accept': 'application/json'
     },
     body: formData,
   });
 
   if (!response.ok) {
-    throw new Error('Failed to send audio message');
+    const errorData = await response.text();
+    throw new Error(`Failed to send audio message: ${errorData}`);
   }
 
   return response.json();
